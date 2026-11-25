@@ -20,7 +20,7 @@
 ## 3. PLC 통신 및 개발 전용 화면 규칙
 - **2계층 구조 분리**:
   - 전송 계층(`Services/Communication/ICommunicationTransport`): `TcpTransport`(이더넷 TCP), `SerialTransport`(RS-232 / RS-485)
-  - 프로토콜 계층(`Services/Plc/IPlcService`): 개발/테스트 시 `MockPlcService` 사용, 실제 장비에서는 LS산전 XGT(FEnet/Cnet) 또는 Modbus 구현체로 DI 교체
+  - 프로토콜 계층(`Services/Plc/IPlcService`): 기본 구현체로 LS산전 XGT(`LsXgtPlcService`, 이더넷 FEnet / 시리얼 Cnet) 사용, 필요 시 Modbus 등 다른 프로토콜 구현체로 DI 교체
 - **개발 전용 사전 테스트 화면(`PlcTestView`)**:
   - `PlcTestViewModel` DI 등록과 `SettingsView`의 진입 버튼은 반드시 `#if DEBUG`로 제한해 `Release` 배포본에서 노출되지 않도록 유지
 

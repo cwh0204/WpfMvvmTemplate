@@ -29,7 +29,7 @@ public partial class App : Application
                 services.AddSingleton<INavigationService, NavigationService>();
                 services.AddSingleton<IDialogService, DialogService>();
                 services.AddSingleton<ISettingsService, SettingsService>();
-                services.AddSingleton<IPlcService, MockPlcService>();
+                services.AddSingleton<IPlcService, LsXgtPlcService>();
 
                 // ViewModels
                 services.AddSingleton<MainViewModel>();
