@@ -258,12 +258,14 @@
                                                 Binding="{Binding TestedDate}"
                                                 Foreground="#475569"
                                                 Header="시험 일자" />
-                            <DataGridTemplateColumn Width="78" Header="판정">
+                            <DataGridTemplateColumn Width="84"
+                                                    Header="판정"
+                                                    HeaderStyle="{StaticResource CenteredDataGridHeaderStyle}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border Width="54"
-                                                Height="25"
-                                                HorizontalAlignment="Left"
+                                                Height="24"
+                                                HorizontalAlignment="Center"
                                                 CornerRadius="12">
                                             <Border.Style>
                                                 <Style TargetType="Border">
@@ -395,10 +397,10 @@
                                            FontWeight="Bold"
                                            Foreground="{StaticResource TextSecondaryBrush}"
                                            Text="종합 판정" />
-                                <Border Margin="0,4,0,0"
-                                        Padding="12,3"
+                                <Border Margin="0,5,0,0"
+                                        Padding="14,3"
                                         HorizontalAlignment="Left"
-                                        CornerRadius="8">
+                                        CornerRadius="6">
                                     <Border.Style>
                                         <Style TargetType="Border">
                                             <Setter Property="Background" Value="#DCFCE7" />
@@ -526,12 +528,14 @@
                                                 FontFamily="Consolas"
                                                 FontWeight="Bold"
                                                 Header="측정값" />
-                            <DataGridTemplateColumn Width="90" Header="판정">
+                            <DataGridTemplateColumn Width="90"
+                                                    Header="판정"
+                                                    HeaderStyle="{StaticResource CenteredDataGridHeaderStyle}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border Width="58"
-                                                Height="25"
-                                                HorizontalAlignment="Left"
+                                                Height="24"
+                                                HorizontalAlignment="Center"
                                                 CornerRadius="12">
                                             <Border.Style>
                                                 <Style TargetType="Border">

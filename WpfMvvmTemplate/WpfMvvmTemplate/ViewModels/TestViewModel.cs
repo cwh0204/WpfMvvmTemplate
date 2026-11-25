@@ -203,6 +203,7 @@ public sealed partial class TestViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanReturnToMain))]
     private void ReturnToMain()
     {
+        _plcService.ConnectionStateChanged -= OnPlcConnectionChanged;
         _navigation.NavigateTo<HomeViewModel>();
     }
 
