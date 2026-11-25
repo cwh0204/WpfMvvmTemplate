@@ -1,0 +1,46 @@
+﻿<Application x:Class="WpfMvvmTemplate.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:WpfMvvmTemplate.Converters"
+             xmlns:views="clr-namespace:WpfMvvmTemplate.Views"
+             xmlns:vm="clr-namespace:WpfMvvmTemplate.ViewModels">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Icons.xaml" />
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- 공용 컨버터 -->
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <converters:InverseBooleanConverter x:Key="InverseBool" />
+
+            <!-- ViewModel -> View 매핑 -->
+            <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+                <views:HomeView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SelfDiagnosisViewModel}">
+                <views:SelfDiagnosisView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SearchResultViewModel}">
+                <views:SearchResultView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PasswordPromptViewModel}">
+                <views:PasswordPromptView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                <views:SettingsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:TestViewModel}">
+                <views:TestView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ConfirmDialogViewModel}">
+                <views:ConfirmDialogView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PlcTestViewModel}">
+                <views:PlcTestView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

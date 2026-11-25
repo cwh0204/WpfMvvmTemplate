@@ -1,0 +1,824 @@
+<UserControl x:Class="WpfMvvmTemplate.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:WpfMvvmTemplate.Helpers"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:WpfMvvmTemplate.ViewModels"
+             d:DataContext="{d:DesignInstance Type=vm:SettingsViewModel}"
+             d:DesignHeight="800"
+             d:DesignWidth="1280"
+             Background="{StaticResource WindowBackgroundBrush}"
+             FontFamily="Pretendard, Malgun Gothic, Segoe UI"
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!-- 좌측 카테고리 메뉴 버튼 스타일 -->
+        <Style x:Key="SettingsNavButtonStyle" TargetType="RadioButton">
+            <Setter Property="Height" Value="46" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="FontSize" Value="13.5" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="bg"
+                                Padding="{TemplateBinding Padding}"
+                                Background="Transparent"
+                                CornerRadius="8">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="{StaticResource SubtleSurfaceBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="{StaticResource InfoBgBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="58" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 1. 상단 풀폭 헤더 바 -->
+        <Border Grid.Row="0"
+                Padding="24,0"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderSubtleBrush}"
+                BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <Path Width="18"
+                          Height="18"
+                          Margin="0,0,10,0"
+                          VerticalAlignment="Center"
+                          Data="{StaticResource IconSettings}"
+                          Stretch="Uniform"
+                          Stroke="{StaticResource PrimaryBrush}"
+                          StrokeEndLineCap="Round"
+                          StrokeLineJoin="Round"
+                          StrokeStartLineCap="Round"
+                          StrokeThickness="1.75" />
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="16.5"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               Text="시스템 설정" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Background="White"
+                        BorderBrush="{StaticResource BorderDefaultBrush}"
+                        BorderThickness="1"
+                        Command="{Binding ReturnToMainCommand}"
+                        Foreground="{StaticResource TextPrimaryBrush}"
+                        Style="{StaticResource ModernButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Path Width="15"
+                              Height="15"
+                              Margin="0,0,6,0"
+                              VerticalAlignment="Center"
+                              Data="{StaticResource IconHome}"
+                              Stretch="Uniform"
+                              Stroke="{StaticResource TextSecondaryBrush}"
+                              StrokeEndLineCap="Round"
+                              StrokeLineJoin="Round"
+                              StrokeStartLineCap="Round"
+                              StrokeThickness="1.75" />
+                        <TextBlock VerticalAlignment="Center" Text="메인 화면" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- 2. 본문: 좌측 카테고리 사이드바 / 우측 설정 상세 패널 -->
+        <Grid Grid.Row="1" Margin="18,16,18,18">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 좌측: 설정 카테고리 메뉴 -->
+            <Border Grid.Column="0"
+                    Margin="0,0,14,0"
+                    Padding="16"
+                    Background="White"
+                    BorderBrush="#E2E8F0"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Effect="{StaticResource SoftCardShadow}">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top"
+                               Margin="4,2,4,14"
+                               FontSize="13"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Text="설정 항목" />
+
+                    <Border DockPanel.Dock="Bottom"
+                            Padding="14,12"
+                            Background="#F8FAFC"
+                            BorderBrush="#E2E8F0"
+                            BorderThickness="1"
+                            CornerRadius="10">
+                        <StackPanel>
+                            <TextBlock FontSize="12"
+                                       FontWeight="Bold"
+                                       Foreground="#475569"
+                                       Text="템플릿 안내" />
+                            <TextBlock Margin="0,4,0,0"
+                                       FontSize="11.5"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       Text="새 설정 카테고리가 필요하면 좌측 메뉴와 우측 패널에 섹션을 추가하세요."
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel>
+                        <RadioButton Command="{Binding SelectCategoryCommand}"
+                                     CommandParameter="0"
+                                     GroupName="SettingsCategory"
+                                     IsChecked="True"
+                                     Style="{StaticResource SettingsNavButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Width="16"
+                                      Height="16"
+                                      Margin="0,0,10,0"
+                                      VerticalAlignment="Center"
+                                      Data="{StaticResource IconLock}"
+                                      Stretch="Uniform"
+                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                      StrokeEndLineCap="Round"
+                                      StrokeLineJoin="Round"
+                                      StrokeStartLineCap="Round"
+                                      StrokeThickness="1.75" />
+                                <TextBlock VerticalAlignment="Center" Text="보안 및 접근 제어" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Command="{Binding SelectCategoryCommand}"
+                                     CommandParameter="1"
+                                     GroupName="SettingsCategory"
+                                     Style="{StaticResource SettingsNavButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Width="16"
+                                      Height="16"
+                                      Margin="0,0,10,0"
+                                      VerticalAlignment="Center"
+                                      Data="{StaticResource IconPlcChip}"
+                                      Stretch="Uniform"
+                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                      StrokeEndLineCap="Round"
+                                      StrokeLineJoin="Round"
+                                      StrokeStartLineCap="Round"
+                                      StrokeThickness="1.75" />
+                                <TextBlock VerticalAlignment="Center" Text="PLC 통신 설정" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Command="{Binding SelectCategoryCommand}"
+                                     CommandParameter="2"
+                                     GroupName="SettingsCategory"
+                                     Style="{StaticResource SettingsNavButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Width="16"
+                                      Height="16"
+                                      Margin="0,0,10,0"
+                                      VerticalAlignment="Center"
+                                      Data="{StaticResource IconInfo}"
+                                      Stretch="Uniform"
+                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                      StrokeEndLineCap="Round"
+                                      StrokeLineJoin="Round"
+                                      StrokeStartLineCap="Round"
+                                      StrokeThickness="1.75" />
+                                <TextBlock VerticalAlignment="Center" Text="시스템 정보" />
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- 우측: 선택된 설정 상세 영역 -->
+            <Border Grid.Column="1"
+                    Padding="28,24"
+                    Background="White"
+                    BorderBrush="#E2E8F0"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Effect="{StaticResource SoftCardShadow}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <!-- 카테고리 0: 보안 및 접근 제어 -->
+                        <StackPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedCategoryIndex}" Value="0">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+
+                            <!-- 섹션 헤더 -->
+                            <DockPanel Margin="0,0,0,22">
+                                <StackPanel DockPanel.Dock="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <Border Width="44"
+                                            Height="44"
+                                            Margin="0,0,14,0"
+                                            Background="{StaticResource InfoBgBrush}"
+                                            CornerRadius="12">
+                                        <Path Width="22"
+                                              Height="22"
+                                              VerticalAlignment="Center"
+                                              Data="{StaticResource IconLock}"
+                                              Stretch="Uniform"
+                                              Stroke="{StaticResource PrimaryBrush}"
+                                              StrokeEndLineCap="Round"
+                                              StrokeLineJoin="Round"
+                                              StrokeStartLineCap="Round"
+                                              StrokeThickness="1.75" />
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock FontSize="17"
+                                                   FontWeight="ExtraBold"
+                                                   Foreground="#0F172A"
+                                                   Text="보안 및 접근 제어" />
+                                        <TextBlock Margin="0,3,0,0"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Text="설정 화면 진입 잠금 및 관리자 비밀번호를 관리합니다." />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- 현재 잠금 상태 배지 -->
+                                <Border Height="30"
+                                        Padding="14,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        CornerRadius="15">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#E2E8F0" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPasswordEnabled}" Value="True">
+                                                    <Setter Property="Background" Value="#DCFCE7" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="12.5"
+                                               FontWeight="Bold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="잠금 비활성" />
+                                                <Setter Property="Foreground" Value="#475569" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsPasswordEnabled}" Value="True">
+                                                        <Setter Property="Text" Value="잠금 활성" />
+                                                        <Setter Property="Foreground" Value="#15803D" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </DockPanel>
+
+                            <!-- 비밀번호 활성화/비활성화 토글 카드 -->
+                            <Border Padding="20,18"
+                                    Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                        <TextBlock FontSize="15"
+                                                   FontWeight="Bold"
+                                                   Foreground="#0F172A"
+                                                   Text="설정 화면 진입 시 비밀번호 사용" />
+                                        <TextBlock Margin="0,4,0,0"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Text="활성화하면 홈 화면에서 설정 진입 시 비밀번호 확인 창이 표시됩니다." />
+                                    </StackPanel>
+
+                                    <CheckBox Grid.Column="1"
+                                              VerticalAlignment="Center"
+                                              IsChecked="{Binding IsPasswordEnabled}"
+                                              Style="{StaticResource ModernToggleSwitchStyle}" />
+                                </Grid>
+                            </Border>
+
+                            <!-- 비밀번호 변경 카드 -->
+                            <Border Margin="0,18,0,0"
+                                    Padding="22,20"
+                                    Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12">
+                                <StackPanel>
+                                    <TextBlock Margin="0,0,0,16"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#0F172A"
+                                               Text="설정 비밀번호 변경" />
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="16" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="16" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Margin="2,0,0,6"
+                                                       FontSize="12.5"
+                                                       FontWeight="Bold"
+                                                       Foreground="#475569"
+                                                       Text="현재 비밀번호" />
+                                            <PasswordBox Height="44"
+                                                         helpers:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Style="{StaticResource ModernPasswordBoxStyle}" />
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Margin="2,0,0,6"
+                                                       FontSize="12.5"
+                                                       FontWeight="Bold"
+                                                       Foreground="#475569"
+                                                       Text="새 비밀번호 (4자 이상)" />
+                                            <PasswordBox Height="44"
+                                                         helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Style="{StaticResource ModernPasswordBoxStyle}" />
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="4">
+                                            <TextBlock Margin="2,0,0,6"
+                                                       FontSize="12.5"
+                                                       FontWeight="Bold"
+                                                       Foreground="#475569"
+                                                       Text="새 비밀번호 확인" />
+                                            <PasswordBox Height="44"
+                                                         helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Style="{StaticResource ModernPasswordBoxStyle}">
+                                                <PasswordBox.InputBindings>
+                                                    <KeyBinding Key="Return" Command="{Binding ChangePasswordCommand}" />
+                                                </PasswordBox.InputBindings>
+                                            </PasswordBox>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,18,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="16" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0"
+                                                Padding="14,10"
+                                                CornerRadius="8">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="#F0FDF4" />
+                                                    <Setter Property="BorderBrush" Value="#BBF7D0" />
+                                                    <Setter Property="BorderThickness" Value="1" />
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasStatusMessage}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsError}" Value="True">
+                                                            <Setter Property="Background" Value="#FEF2F2" />
+                                                            <Setter Property="BorderBrush" Value="#FECACA" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Text="{Binding StatusMessage}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#15803D" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsError}" Value="True">
+                                                                <Setter Property="Foreground" Value="#B91C1C" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+
+                                        <Button Grid.Column="2"
+                                                Width="144"
+                                                Height="44"
+                                                Background="{StaticResource PrimaryBrush}"
+                                                Command="{Binding ChangePasswordCommand}"
+                                                Content="비밀번호 변경"
+                                                Style="{StaticResource ModernButtonStyle}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- 카테고리 1: PLC 통신 설정 -->
+                        <StackPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedCategoryIndex}" Value="1">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+
+                            <DockPanel Margin="0,0,0,22">
+                                <StackPanel DockPanel.Dock="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <Border Width="44"
+                                            Height="44"
+                                            Margin="0,0,14,0"
+                                            Background="{StaticResource InfoBgBrush}"
+                                            CornerRadius="12">
+                                        <Path Width="22"
+                                              Height="22"
+                                              VerticalAlignment="Center"
+                                              Data="{StaticResource IconPlcChip}"
+                                              Stretch="Uniform"
+                                              Stroke="{StaticResource PrimaryBrush}"
+                                              StrokeEndLineCap="Round"
+                                              StrokeLineJoin="Round"
+                                              StrokeStartLineCap="Round"
+                                              StrokeThickness="1.75" />
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock FontSize="17"
+                                                   FontWeight="ExtraBold"
+                                                   Foreground="#0F172A"
+                                                   Text="PLC 통신 설정" />
+                                        <TextBlock Margin="0,3,0,0"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Text="LS산전 PLC 연결 방식(이더넷 / RS-232·485) 및 통신 파라미터를 설정합니다." />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- Debug 빌드 전용 PLC 사전 테스트 창 열기 버튼 -->
+                                <Button Height="40"
+                                        Padding="16,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Background="#D97706"
+                                        Command="{Binding OpenPlcTestCommand}"
+                                        Content="PLC 테스트 창 (개발 전용)"
+                                        Style="{StaticResource ModernButtonStyle}"
+                                        Visibility="{Binding IsDebugBuild, Converter={StaticResource BoolToVis}}" />
+                            </DockPanel>
+
+                            <!-- 통신 방식 선택 -->
+                            <Border Padding="20,18"
+                                    Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12">
+                                <DockPanel>
+                                    <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center">
+                                        <TextBlock FontSize="15"
+                                                   FontWeight="Bold"
+                                                   Foreground="#0F172A"
+                                                   Text="물리적 연결 방식" />
+                                        <TextBlock Margin="0,4,0,0"
+                                                   FontSize="12.5"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Text="장비 사양에 따라 이더넷(TCP) 또는 시리얼(RS-232 / RS-485)을 선택하세요." />
+                                    </StackPanel>
+
+                                    <Border Padding="4"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Background="#E2E8F0"
+                                            CornerRadius="10">
+                                        <StackPanel Orientation="Horizontal">
+                                            <RadioButton Command="{Binding SelectEthernetModeCommand}"
+                                                         Content="이더넷 (TCP)"
+                                                         IsChecked="{Binding IsEthernetMode, Mode=OneWay}"
+                                                         Style="{StaticResource ModeTabStyle}" />
+                                            <RadioButton Margin="4,0,0,0"
+                                                         Command="{Binding SelectSerialModeCommand}"
+                                                         Content="시리얼 (232/485)"
+                                                         IsChecked="{Binding IsSerialMode, Mode=OneWay}"
+                                                         Style="{StaticResource ModeTabStyle}" />
+                                        </StackPanel>
+                                    </Border>
+                                </DockPanel>
+                            </Border>
+
+                            <!-- 이더넷 파라미터 카드 -->
+                            <Border Margin="0,16,0,0"
+                                    Padding="22,20"
+                                    Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Visibility="{Binding IsEthernetMode, Converter={StaticResource BoolToVis}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Margin="2,0,0,6"
+                                                   FontSize="12.5"
+                                                   FontWeight="Bold"
+                                                   Foreground="#475569"
+                                                   Text="PLC IP 주소" />
+                                        <TextBox Height="44"
+                                                 FontFamily="Consolas"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding PlcIpAddress, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Margin="2,0,0,6"
+                                                   FontSize="12.5"
+                                                   FontWeight="Bold"
+                                                   Foreground="#475569"
+                                                   Text="포트 (FEnet: 2004)" />
+                                        <TextBox Height="44"
+                                                 FontFamily="Consolas"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding PlcPort, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="4">
+                                        <TextBlock Margin="2,0,0,6"
+                                                   FontSize="12.5"
+                                                   FontWeight="Bold"
+                                                   Foreground="#475569"
+                                                   Text="타임아웃 (ms)" />
+                                        <TextBox Height="44"
+                                                 FontFamily="Consolas"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding PlcTimeoutMs, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- 시리얼 파라미터 카드 -->
+                            <Border Margin="0,16,0,0"
+                                    Padding="22,20"
+                                    Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Visibility="{Binding IsSerialMode, Converter={StaticResource BoolToVis}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Margin="2,0,0,6"
+                                                   FontSize="12.5"
+                                                   FontWeight="Bold"
+                                                   Foreground="#475569"
+                                                   Text="COM 포트" />
+                                        <ComboBox Height="44"
+                                                  IsEditable="True"
+                                                  ItemsSource="{Binding AvailableComPorts}"
+                                                  Style="{StaticResource ModernComboBoxStyle}"
+                                                  Text="{Binding SerialPortName, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Margin="2,0,0,6"
+                                                   FontSize="12.5"
+                                                   FontWeight="Bold"
+                                                   Foreground="#475569"
+                                                   Text="통신 속도 (bps)" />
+                                        <ComboBox Height="44"
+                                                  ItemsSource="{Binding BaudRateOptions}"
+                                                  SelectedItem="{Binding BaudRate}"
+                                                  Style="{StaticResource ModernComboBoxStyle}" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="4">
+                                        <TextBlock Margin="2,0,0,6"
+                                                   FontSize="12.5"
+                                                   FontWeight="Bold"
+                                                   Foreground="#475569"
+                                                   Text="국번 (RS-485)" />
+                                        <TextBox Height="44"
+                                                 FontFamily="Consolas"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding StationNo, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="6">
+                                        <TextBlock Margin="2,0,0,6"
+                                                   FontSize="12.5"
+                                                   FontWeight="Bold"
+                                                   Foreground="#475569"
+                                                   Text="타임아웃 (ms)" />
+                                        <TextBox Height="44"
+                                                 FontFamily="Consolas"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding PlcTimeoutMs, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- 저장 / 연결 테스트 + 상태 배너 -->
+                            <Grid Margin="0,18,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Padding="14,10"
+                                        CornerRadius="8">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#F0FDF4" />
+                                            <Setter Property="BorderBrush" Value="#BBF7D0" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasPlcStatusMessage}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsPlcError}" Value="True">
+                                                    <Setter Property="Background" Value="#FEF2F2" />
+                                                    <Setter Property="BorderBrush" Value="#FECACA" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding PlcStatusMessage}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#15803D" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsPlcError}" Value="True">
+                                                        <Setter Property="Foreground" Value="#B91C1C" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <Button Width="120"
+                                            Height="44"
+                                            Margin="0,0,10,0"
+                                            Background="{StaticResource AccentHoverBrush}"
+                                            Command="{Binding TestPlcConnectionCommand}"
+                                            Content="연결 테스트"
+                                            Style="{StaticResource ModernButtonStyle}" />
+                                    <Button Width="120"
+                                            Height="44"
+                                            Background="{StaticResource PrimaryBrush}"
+                                            Command="{Binding SavePlcSettingsCommand}"
+                                            Content="설정 저장"
+                                            Style="{StaticResource ModernButtonStyle}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- 카테고리 2: 시스템 정보 -->
+                        <StackPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedCategoryIndex}" Value="2">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+
+                            <StackPanel Margin="0,0,0,22" Orientation="Horizontal">
+                                <Border Width="44"
+                                        Height="44"
+                                        Margin="0,0,14,0"
+                                        Background="{StaticResource InfoBgBrush}"
+                                        CornerRadius="12">
+                                    <Path Width="22"
+                                          Height="22"
+                                          VerticalAlignment="Center"
+                                          Data="{StaticResource IconInfo}"
+                                          Stretch="Uniform"
+                                          Stroke="{StaticResource PrimaryBrush}"
+                                          StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round"
+                                          StrokeStartLineCap="Round"
+                                          StrokeThickness="1.75" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock FontSize="17"
+                                               FontWeight="ExtraBold"
+                                               Foreground="#0F172A"
+                                               Text="시스템 정보" />
+                                    <TextBlock Margin="0,3,0,0"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Text="애플리케이션 및 런타임 환경 정보입니다." />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <UniformGrid Columns="2">
+                                <Border Margin="0,0,12,0" Style="{StaticResource SummaryMetricCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock FontSize="12"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Text="애플리케이션 버전" />
+                                        <TextBlock Margin="0,6,0,0"
+                                                   FontFamily="Consolas"
+                                                   FontSize="16"
+                                                   FontWeight="ExtraBold"
+                                                   Foreground="{StaticResource PrimaryBrush}"
+                                                   Text="{Binding AppVersion}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{StaticResource SummaryMetricCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock FontSize="12"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Text=".NET 런타임 버전" />
+                                        <TextBlock Margin="0,6,0,0"
+                                                   FontFamily="Consolas"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Foreground="#0F172A"
+                                                   Text="{Binding RuntimeVersion}" />
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
