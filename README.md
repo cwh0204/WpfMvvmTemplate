@@ -89,5 +89,3 @@ dotnet restore
 dotnet build -c Debug
 dotnet build -c Release
 ```
-
-> **참고:** GitHub 저장소 메인 페이지에 README가 바로 표시되려면 `README.md` 파일이 `.git` 폴더와 같은 최상위 루트에 위치해야 합니다.
